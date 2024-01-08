@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: axum-api
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: api-container
+        env:
+        - name: ENVIRONMENT
+          value: dev

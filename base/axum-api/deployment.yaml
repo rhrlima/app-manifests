@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: axum-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: axum-api
+  template:
+    metadata:
+      labels:
+        app: axum-api
+    spec:
+      containers:
+      - name: api-container
+        image: ghcr.io/rhrlima/axum-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
