@@ -11,4 +11,4 @@ patches:
 
 images:
 - name: ghcr.io/rhrlima/axum-api
-  newTag: v1.0
+  newTag: 2024.01.11-20.20.47
