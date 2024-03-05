@@ -1,0 +1,27 @@
+name: Deploy
+
+on:
+  workflow_dispatch: # manual trigger
+    inputs:
+      image_tag:
+        description: Image tag to be deployed
+        requried: true
+        default: latest
+        type: string
+      manifest_path:
+        description: Path to the manifest file to be changed
+        requried: true
+        type: string
+
+  repository_dispatch: # remote trigger
+    types: [Automated Deploy]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          IMAGE_TAG=${{ github.event.client_payload.image_tag || inputs.image_tag }}
+          MANIFEST_PATH=${{ github.event.client_payload.manifest_path || inputs.manifest_path }}
+          echo "Deploying image ${IMAGE_TAG} in ${MANIFEST_PATH}"
