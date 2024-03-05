@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: api-container
-        image: ghcr.io/rhrlima/axum-api:v2.0.0
+        image: ghcr.io/rhrlima/axum-api:v2024.03.05-21.04.24
         env:
         - name: ENVIRONMENT
           value: dev
