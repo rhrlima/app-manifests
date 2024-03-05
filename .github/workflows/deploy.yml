@@ -5,12 +5,16 @@ on:
     inputs:
       image_tag:
         description: Image tag to be deployed
-        requried: true
+        required: true
         default: latest
+        type: string
+      image_name:
+        description: Name of the image to be updated
+        required: true
         type: string
       manifest_path:
         description: Path to the manifest file to be changed
-        requried: true
+        required: true
         type: string
 
   repository_dispatch: # remote trigger
@@ -19,9 +23,26 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      IMAGE_TAG: ${{ github.event.client_payload.image_tag || inputs.image_tag }}
+      IMAGE_NAME: ${{ github.event.client_payload.image_name || inputs.image_name }}
+      MANIFEST_PATH: ${{ github.event.client_payload.manifest_path || inputs.manifest_path }}
+
     steps:
       - name: Deploy
+        run: echo "Deploying image ${IMAGE_NAME}:${IMAGE_TAG} in ${MANIFEST_PATH}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update image tag
+        run: sed -i "s|${IMAGE_NAME}:.*|${IMAGE_NAME}:${IMAGE_TAG}|" ${MANIFEST_PATH}
+
+      - name: Commit and push changes
         run: |
-          IMAGE_TAG=${{ github.event.client_payload.image_tag || inputs.image_tag }}
-          MANIFEST_PATH=${{ github.event.client_payload.manifest_path || inputs.manifest_path }}
-          echo "Deploying image ${IMAGE_TAG} in ${MANIFEST_PATH}"
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image ${IMAGE_NAME} to tag ${IMAGE_TAG}"
+          git push
