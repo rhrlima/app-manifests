@@ -22,7 +22,10 @@ on:
 
 jobs:
   deploy:
+    name: Update Image Tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     env:
       IMAGE_TAG: ${{ github.event.client_payload.image_tag || inputs.image_tag }}
