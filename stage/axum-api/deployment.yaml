@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: axum-api
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: api-container
+        image: ghcr.io/rhrlima/axum-api:2024.01.12-19.59.48
+        env:
+        - name: ENVIRONMENT
+          value: stage

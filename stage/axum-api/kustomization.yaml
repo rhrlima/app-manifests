@@ -8,3 +8,7 @@ resources:
 
 patches:
 - path: deployment.yaml
+
+images:
+- name: ghcr.io/rhrlima/axum-api
+  newTag: 2024.01.12-19.59.48
