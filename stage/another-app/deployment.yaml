@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: another-app
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: api-container
+        image: ghcr.io/datarisk-io/datapi-test-deploy:v1.0.0
+        env:
+        - name: ENVIRONMENT
+          value: stage
