@@ -18,7 +18,9 @@ on:
         type: string
 
   repository_dispatch: # remote trigger
-    types: [Automated Deploy]
+    types:
+    - Deploy Stage
+    - Deploy Production
 
 jobs:
   deploy:
