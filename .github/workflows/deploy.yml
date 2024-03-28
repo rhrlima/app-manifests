@@ -46,8 +46,8 @@ jobs:
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           branch: 'release/${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}'
-          commit-message: "Update image ${{ env.IMAGE_NAME }} to tag ${{ env.IMAGE_TAG }}"
-          title: ${{ github.event.type }}
+          commit-message: 'Update image ${{ env.IMAGE_NAME }} to tag ${{ env.IMAGE_TAG }}'
+          title: ${{ github.event.type || "Deploy" }}
 
       # - name: Commit and push changes
       #   run: |
