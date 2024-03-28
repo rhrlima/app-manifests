@@ -35,6 +35,7 @@ jobs:
       IMAGE_TAG: ${{ github.event.client_payload.image_tag || inputs.image_tag }}
       IMAGE_NAME: ${{ github.event.client_payload.image_name || inputs.image_name }}
       MANIFEST_PATH: ${{ github.event.client_payload.manifest_path || inputs.manifest_path }}
+      PR_TITLE: ${{ github.event.client_payload.event_type || inputs.pr_title }}
 
     steps:
       - name: Deploy
@@ -52,7 +53,7 @@ jobs:
           token: ${{ secrets.DEPLOY_TOKEN }}
           branch: 'release/${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}'
           commit-message: 'Update image ${{ env.IMAGE_NAME }} to tag ${{ env.IMAGE_TAG }}'
-          title: ${{ github.event_type }}
+          title: ${{ env.PR_TITLE }}
           delete-branch: true
 
       # - name: Commit and push changes
