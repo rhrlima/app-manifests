@@ -44,6 +44,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           branch: 'release/${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}'
 
       # - name: Commit and push changes
