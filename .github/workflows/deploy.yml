@@ -16,6 +16,11 @@ on:
         description: Path to the manifest
         required: true
         type: string
+      pr_title:
+        description: Title of the Pull Request
+        required: true
+        default: Deploy
+        type: string
 
   repository_dispatch: # remote trigger
 
@@ -47,7 +52,7 @@ jobs:
           token: ${{ secrets.DEPLOY_TOKEN }}
           branch: 'release/${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}'
           commit-message: 'Update image ${{ env.IMAGE_NAME }} to tag ${{ env.IMAGE_TAG }}'
-          title: ${{ github.event.type || "Deploy" }}
+          title: ${{ github.event.type || inputs.pt_title }}
           delete-branch: true
 
       # - name: Commit and push changes
