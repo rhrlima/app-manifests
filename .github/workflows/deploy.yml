@@ -41,10 +41,15 @@ jobs:
       - name: Update image tag
         run: sed -i "s|${IMAGE_NAME}:.*|${IMAGE_NAME}:${IMAGE_TAG}|" ${MANIFEST_PATH}
 
-      - name: Commit and push changes
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Update image ${IMAGE_NAME} to tag ${IMAGE_TAG}"
-          git push
+      - name: Create Pull Request
+        uses: peter-evans/enable-pull-request-automerge@v6
+        with:
+          branch: 'release/${IMAGE_NAME}:${IMAGE_TAG}'
+
+      # - name: Commit and push changes
+      #   run: |
+      #     git config user.name "GitHub Actions"
+      #     git config user.email "actions@github.com"
+      #     git add .
+      #     git commit -m "Update image ${IMAGE_NAME} to tag ${IMAGE_TAG}"
+      #     git push
