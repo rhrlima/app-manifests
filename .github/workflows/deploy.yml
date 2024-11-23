@@ -1,62 +1,18 @@
 name: Deploy
 
-on:
-  workflow_dispatch: # manual trigger for testing
-    inputs:
-      image_tag:
-        description: Image tag
-        required: true
-        default: latest
-        type: string
-      image_name:
-        description: Image name
-        required: true
-        type: string
-      manifest_path:
-        description: Path to the manifest
-        required: true
-        type: string
-      pr_title:
-        description: Title of the Pull Request
-        required: true
-        default: Deploy
-        type: string
-
-  repository_dispatch: # remote trigger
+on: [repository_dispatch]
 
 jobs:
   deploy:
     name: Update Image Tag
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    env:
-      IMAGE_TAG: ${{ github.event.client_payload.image_tag || inputs.image_tag }}
-      IMAGE_NAME: ${{ github.event.client_payload.image_name || inputs.image_name }}
-      MANIFEST_PATH: ${{ github.event.client_payload.manifest_path || inputs.manifest_path }}
-      PR_TITLE: ${{ github.event.client_payload.event_type || inputs.pr_title }}
 
     steps:
       - name: Deploy
-        run: echo "Deploying image ${IMAGE_NAME}:${IMAGE_TAG} in ${MANIFEST_PATH}"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Update image tag
-        run: sed -i "s|${IMAGE_NAME}:.*|${IMAGE_NAME}:${IMAGE_TAG}|" ${MANIFEST_PATH}
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: rhrlima/ci-actions/actions/deploy-receive@main
         with:
-          token: ${{ secrets.DEPLOY_TOKEN }}
-          branch: 'release/${{ env.IMAGE_NAME }}-${{ env.IMAGE_TAG }}'
-          commit-message: 'Update image ${{ env.IMAGE_NAME }} to tag ${{ env.IMAGE_TAG }}'
-          title: ${{ env.PR_TITLE }}
-          delete-branch: true
-
-      - name: Enable Pull Request Automerge
-        run: gh pr merge --merge --auto "${{ env.PULL_REQUEST_NUMBER }}"
-        env:
-          GH_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          IMAGE_TAG: ${{ github.event.client_payload.IMAGE_TAG }}
+          IMAGE_NAME: ${{ github.event.client_payload.IMAGE_NAME }}
+          MANIFEST_PATH: ${{ github.event.client_payload.MANIFEST_PATH }}
+          PR_TITLE: ${{ github.event.client_payload.PR_TITLE }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
