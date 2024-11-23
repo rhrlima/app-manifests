@@ -14,5 +14,5 @@ jobs:
           IMAGE_TAG: ${{ github.event.client_payload.IMAGE_TAG }}
           IMAGE_NAME: ${{ github.event.client_payload.IMAGE_NAME }}
           MANIFEST_PATH: ${{ github.event.client_payload.MANIFEST_PATH }}
-          PR_TITLE: ${{ github.event.client_payload.PR_TITLE }}
+          PR_TITLE: ${{ github.event.client_payload.EVENT_TYPE }}
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
